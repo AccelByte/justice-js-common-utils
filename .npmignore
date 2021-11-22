@@ -1,10 +1,5 @@
 .Trash*
-src
-scripts
 test
-tsconfig.json
-tsconfig.module.json
-tslint.json
 .idea
 .yarn.lock
 .travis.yml
