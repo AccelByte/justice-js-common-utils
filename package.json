@@ -8,6 +8,13 @@
   "repository": "git+ssh://git@bitbucket.org/accelbyte/justice-js-common-utils.git",
   "license": "MIT",
   "keywords": [],
+  "files": [
+    "scripts",
+    "src",
+    "tsconfig.json",
+    "tsconfig.module.json",
+    "tslint.json"
+  ],
   "scripts": {
     "describe": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",
