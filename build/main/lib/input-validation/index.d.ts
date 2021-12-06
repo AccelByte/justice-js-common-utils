@@ -23,6 +23,7 @@ export * from "./validateProductKey";
 export * from "./validateTag";
 export * from "./validateStatisticTag";
 export * from "./validateSku";
+export * from "./validateSubdomain";
 export * from "./validateTemplateSlug";
 export * from "./validateTopic";
 export * from "./validateUrl";
