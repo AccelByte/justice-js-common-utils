@@ -35,7 +35,8 @@
     "reset": "git clean -dfx && git reset --hard && yarn install",
     "clean": "trash build test",
     "precommit": "run-s test && node scripts/preCommit",
-    "postinstall": "sh ./scripts/install.sh"
+    "postinstall": "sh ./scripts/install.sh",
+    "prepare": "echo something"
   },
   "scripts-info": {
     "info": "Display information about the package scripts",
