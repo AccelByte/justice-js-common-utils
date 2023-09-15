@@ -29,7 +29,7 @@ const localizedBadWords = {
   de: naughtyWords.de,
   en: naughtyWords.en.concat(enExtra),
   eo: naughtyWords.eo,
-  es: naughtyWords.es,
+  es: naughtyWords.es.map(words => words.toLowerCase()),
   fa: naughtyWords.fa,
   fi: naughtyWords.fi,
   fil: naughtyWords.fil,
@@ -48,7 +48,7 @@ const localizedBadWords = {
   sv: naughtyWords.sv,
   th: naughtyWords.th,
   tlh: naughtyWords.tlh,
-  tr: naughtyWords.tr,
+  tr: naughtyWords.tr.map(words => words.toLowerCase()),
   zh: naughtyWords.zh,
 };
 
