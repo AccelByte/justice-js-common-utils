@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.36.6]
+### Fixed
+- fix `validateBadWords`, convert `ES` and `TR` bad words to `lowerCase`
+
 ## [1.36.5]
 ### Added
 - Error translation for `30075` in `adminServiceErrorTranslationMap`
@@ -88,7 +92,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.33.1]
 ### Changed
-- update isOnBrowser window checking because it caused error on Odin Player Portal 
+- update isOnBrowser window checking because it caused error on Odin Player Portal
 
 ## [1.33.0]
 ### Added
