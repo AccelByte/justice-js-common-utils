@@ -29,6 +29,7 @@ export const DEFAULT_USERNAME_RULE = {
   allowLetter: true,
   allowDigit: true,
   allowSpace: false,
+  allowAllSpecialCharacters: false,
   isCustomRegex: false,
   specialCharacters: ["_", "-"],
   blockedWord: [],
@@ -44,6 +45,7 @@ export const DEFAULT_DISPLAYNAME_RULE = {
   allowLetter: true,
   allowDigit: true,
   allowSpace: true,
+  allowAllSpecialCharacters: false,
   isCustomRegex: false,
   specialCharacters: ["'", ",", ".", "-"],
   blockedWord: [],
@@ -59,6 +61,7 @@ export const DEFAULT_PASSWORD_RULE = {
   allowLetter: true,
   allowDigit: true,
   allowSpace: false,
+  allowAllSpecialCharacters: true,
   isCustomRegex: false,
   blockedWord: [],
   specialCharacters: [
@@ -109,6 +112,7 @@ export const DEFAULT_EMAIL_RULE = {
   allowLetter: true,
   allowDigit: true,
   allowSpace: false,
+  allowAllSpecialCharacters: false,
   isCustomRegex: false,
   specialCharacters: ["@", ".", "+", "_", "-"],
   blockedWord: [],
@@ -127,6 +131,7 @@ export interface RegexGeneratorParam {
   allowLetter: boolean;
   allowDigit: boolean;
   allowSpace: boolean;
+  allowAllSpecialCharacters?: boolean;
   isCustomRegex: boolean;
   specialCharacters: string[];
 }
@@ -142,6 +147,7 @@ export const generatePattern = ({
   allowLetter,
   allowDigit,
   allowSpace,
+  allowAllSpecialCharacters,
   isCustomRegex,
   specialCharacters,
 }: RegexGeneratorParam): string => {
@@ -191,6 +197,11 @@ export const generatePattern = ({
   let specialChars: string = "";
   let allowedSpecialChars: string = "";
 
+  if (allowAllSpecialCharacters) {
+    specialChars = "_\\W";
+    specialCharacters = [specialChars];
+  }
+
   if (specialCharacters.length > 0) {
     specialChars = specialCharacters.join("");
     let quantifier = "*";
@@ -208,9 +219,10 @@ export const generatePattern = ({
       default:
         allowedCharacterString += specialChars;
     }
+
+    allowedCharacterList = [...allowedCharacterList, createPositiveLookahead(specialChars)];
   }
 
-  allowedCharacterList = [...allowedCharacterList, createPositiveLookahead(specialChars)];
   allowedCharacterString = createCharacterSet(allowedCharacterString);
 
   const combinations = createCombination(allowedCharacterList, minCharType);
@@ -240,9 +252,8 @@ export const generatePattern = ({
   let allowedChars = allowedCharacterString;
   if (!!allowedSpecialChars) {
     if (allowedCharacterString !== "") {
-      const quantifier = specialCharacterLocation === CharacterLocationEnum.anywhere ? "*" : "+";
       allowedChars += `${createCapturingGroup(allowedSpecialChars)}?`;
-      allowedChars += `${allowedCharacterString}${quantifier}|${allowedCharacterString}`;
+      allowedChars += `${allowedCharacterString}+|${allowedCharacterString}`;
     } else {
       allowedChars += allowedSpecialChars;
     }
@@ -250,10 +261,19 @@ export const generatePattern = ({
 
   if (maxRepeatingSpecialCharacter > 0 && specialCharacters.length > 0) {
     const specials = specialCharacters.join("");
-    result += `(?!.*([${specials}])\\${capturingGroupNum.toString()}{${maxRepeatingSpecialCharacter.toString()},})`;
+    if (allowAllSpecialCharacters) {
+      result += `(?!.*([_\\W])\\${capturingGroupNum.toString()}{${maxRepeatingSpecialCharacter.toString()},})`;
+    } else {
+      result += `(?!.*([${specials}])\\${capturingGroupNum.toString()}{${maxRepeatingSpecialCharacter.toString()},})`;
+    }
   }
 
   result += createCapturingGroup(allowedChars);
+
+  if (!allowSpace && allowAllSpecialCharacters) {
+    result += createCapturingGroup(`[^\\s]`);
+  }
+
   if (allowedCharacterString !== "") {
     result += "*";
   }
